@@ -1,0 +1,23 @@
+{
+  "name": "rateitserver",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pawel Kowalewski",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.0",
+    "mongo-sanitize": "^1.1.0",
+    "mongoose": "^5.12.14",
+    "nodemailer": "^6.6.2",
+    "nodemailer-sendinblue-transport": "^1.2.3",
+    "uuid": "^8.3.2"
+  }
+}
