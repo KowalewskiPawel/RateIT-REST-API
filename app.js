@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-const restrictOrigin = require("./middlewares/restrictOrigin");
+const restrictedOrigins = require("./middlewares/restrictedOrigins");
 
 const app = express();
 
@@ -24,7 +24,7 @@ mongoose
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(restrictOrigin);
+app.use(restrictedOrigins);
 
 app.use("/users", require("./routes/users"));
 

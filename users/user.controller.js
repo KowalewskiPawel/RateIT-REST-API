@@ -207,13 +207,6 @@ exports.ForgotPassword = async (req, res) => {
     const user = await User.findOne({
       email: email,
     });
-    if (!user) {
-      return res.send({
-        success: true,
-        message:
-          "If the email address is in our database, we will send you an email to reset your password",
-      });
-    }
 
     let code = Math.floor(100000 + Math.random() * 900000);
     let response = await sendEmail(user.email, code);
@@ -233,8 +226,7 @@ exports.ForgotPassword = async (req, res) => {
 
     return res.send({
       success: true,
-      message:
-        "If that email address is in our database, we will send you an email to reset your password",
+      message: "Please check your email inbox for the reset code",
     });
   } catch (error) {
     console.error("forgot-password-error", error);
