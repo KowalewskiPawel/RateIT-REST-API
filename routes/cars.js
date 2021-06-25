@@ -17,4 +17,11 @@ router.post("/", validateToken, cleanBody, CarController.AddCar);
 
 router.post("/:make/:model", validateToken, cleanBody, CarController.AddReview);
 
+router.put(
+  "/:make/:model/:_id",
+  validateToken,
+  cleanBody,
+  CarController.EditReview
+);
+
 module.exports = router;

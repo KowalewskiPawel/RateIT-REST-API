@@ -177,3 +177,44 @@ exports.AddReview = async (req, res) => {
     message: "Cannot add the car review",
   });
 };
+
+exports.EditReview = async (req, res) => {
+  try {
+    const result = reviewSchema.validate(req.body);
+    if (result.error) {
+      console.log(result.error.message);
+      return res.json({
+        error: true,
+        status: 400,
+        message: result.error.message,
+      });
+    }
+
+    const tempCar = await Car.updateOne(
+      {
+        make: req.params.make,
+        models: {
+          $elemMatch: {
+            name: req.params.model,
+            "models.$.reviews._id": req.params._id,
+          },
+        },
+        // "models.name": req.params.model,
+        //   "reviews._id": req.params._id,
+      },
+      { $set: { "models.$.reviews": result.value } }
+    );
+
+    console.log(tempCar);
+
+    return res.status(200).json({
+      success: true,
+      message: "Review added to the DB",
+    });
+  } catch (error) {}
+  console.error(error);
+  return res.status(500).json({
+    error: true,
+    message: "Cannot add the car review",
+  });
+};
