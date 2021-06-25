@@ -28,6 +28,8 @@ app.use(restrictedOrigins);
 
 app.use("/users", require("./routes/users"));
 
+app.use("/cars", require("./routes/cars"));
+
 app.get("/ping", (req, res) => {
   return res.send({
     error: false,
