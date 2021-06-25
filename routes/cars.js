@@ -15,4 +15,6 @@ router.get("/:make/:model", CarController.FindModel);
 
 router.post("/", validateToken, cleanBody, CarController.AddCar);
 
+router.post("/:make/:model", validateToken, cleanBody, CarController.AddReview);
+
 module.exports = router;

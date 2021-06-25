@@ -8,6 +8,16 @@ const carSchema = Joi.object().keys({
   models: Joi.array().required().min(1),
 });
 
+const reviewSchema = Joi.object().keys({
+  Version: Joi.string().required().min(2),
+  Year: Joi.number().required().min(4),
+  Engine: Joi.string().required().min(2),
+  General: Joi.string().required().min(10),
+  Pros: Joi.string().required().min(4),
+  Cons: Joi.string().required().min(4),
+  User: Joi.string().required().min(2),
+});
+
 exports.Cars = async (req, res) => {
   try {
     let cars = await Car.find({});
@@ -137,4 +147,33 @@ exports.AddCar = async (req, res) => {
       message: "Cannot add the car make",
     });
   }
+};
+
+exports.AddReview = async (req, res) => {
+  try {
+    const result = reviewSchema.validate(req.body);
+    if (result.error) {
+      console.log(result.error.message);
+      return res.json({
+        error: true,
+        status: 400,
+        message: result.error.message,
+      });
+    }
+
+    await Car.updateOne(
+      { make: req.params.make, "models.name": req.params.model },
+      { $push: { "models.$.reviews": result.value } }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Review added to the DB",
+    });
+  } catch (error) {}
+  console.error(error);
+  return res.status(500).json({
+    error: true,
+    message: "Cannot add the car review",
+  });
 };
