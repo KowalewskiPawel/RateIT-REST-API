@@ -24,4 +24,6 @@ router.put(
   CarController.EditReview
 );
 
+router.delete("/:make/:model/:_id", validateToken, CarController.DeleteReview);
+
 module.exports = router;

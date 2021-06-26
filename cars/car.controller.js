@@ -136,7 +136,7 @@ exports.AddCar = async (req, res) => {
 
     await newCar.save();
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: "Car Make added to the DB",
     });
@@ -166,7 +166,7 @@ exports.AddReview = async (req, res) => {
       { $push: { "models.$.reviews": result.value } }
     );
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: "Review added to the DB",
     });
@@ -205,7 +205,7 @@ exports.EditReview = async (req, res) => {
       }
     );
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: "Review added to the DB",
     });
@@ -214,6 +214,36 @@ exports.EditReview = async (req, res) => {
     return res.status(500).json({
       error: true,
       message: "Cannot add the car review",
+    });
+  }
+};
+
+exports.DeleteReview = async (req, res) => {
+  try {
+    const tempCar = await Car.findOneAndUpdate(
+      {
+        make: req.params.make,
+      },
+      // "models.name": req.params.model,
+      //   "reviews._id": req.params._id,
+      { $pull: { "models.$[e1].reviews": { _id: req.params._id } } },
+      {
+        arrayFilters: [
+          { "e1.name": req.params.model },
+          { "e2._id": req.params._id },
+        ],
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Review removed from the DB",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: true,
+      message: "Cannot delete the review",
     });
   }
 };
