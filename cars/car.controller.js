@@ -190,31 +190,30 @@ exports.EditReview = async (req, res) => {
       });
     }
 
-    const tempCar = await Car.updateOne(
+    const tempCar = await Car.findOneAndUpdate(
       {
         make: req.params.make,
-        models: {
-          $elemMatch: {
-            name: req.params.model,
-            "models.$.reviews._id": req.params._id,
-          },
-        },
-        // "models.name": req.params.model,
-        //   "reviews._id": req.params._id,
       },
-      { $set: { "models.$.reviews": result.value } }
+      // "models.name": req.params.model,
+      //   "reviews._id": req.params._id,
+      { $set: { "models.$[e1].reviews.$[e2]": result.value } },
+      {
+        arrayFilters: [
+          { "e1.name": req.params.model },
+          { "e2._id": req.params._id },
+        ],
+      }
     );
-
-    console.log(tempCar);
 
     return res.status(200).json({
       success: true,
       message: "Review added to the DB",
     });
-  } catch (error) {}
-  console.error(error);
-  return res.status(500).json({
-    error: true,
-    message: "Cannot add the car review",
-  });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: true,
+      message: "Cannot add the car review",
+    });
+  }
 };
