@@ -1,9 +1,9 @@
 const Joi = require("joi");
 const { v4: uuid } = require("uuid");
 
-const Car = require("./car.model");
+const Bike = require("./bike.model");
 
-const carSchema = Joi.object().keys({
+const bikeSchema = Joi.object().keys({
   make: Joi.string().required().min(2),
   models: Joi.array().required().min(1),
 });
@@ -18,32 +18,32 @@ const reviewSchema = Joi.object().keys({
   User: Joi.string().required().min(2),
 });
 
-exports.Cars = async (req, res) => {
+exports.Bikes = async (req, res) => {
   try {
-    let cars = await Car.find({});
+    let bikes = await Bike.find({});
 
-    if (cars.length < 1) {
+    if (bikes.length < 1) {
       return res.json({
         error: true,
         status: 404,
-        message: "No Cars in the DB",
+        message: "No Bikes in the DB",
       });
     }
-    return res.json(cars);
+    return res.json(bikes);
   } catch (err) {
     console.error(err);
     return res.status(500).json({
       error: true,
-      message: "Cannot find cars",
+      message: "Cannot find bikes",
     });
   }
 };
 
-exports.FindCar = async (req, res) => {
+exports.FindBike = async (req, res) => {
   try {
-    let car = await Car.find({ make: req.params.make });
+    let bike = await Bike.find({ make: req.params.make });
 
-    if (car.length < 1) {
+    if (bike.length < 1) {
       return res.json({
         error: true,
         status: 404,
@@ -51,19 +51,22 @@ exports.FindCar = async (req, res) => {
       });
     }
 
-    return res.json(car);
+    return res.json(bike);
   } catch (err) {
     console.error(err);
     return res.status(500).json({
       error: true,
-      message: "Cannot find the given car model",
+      message: "Cannot find the given bike model",
     });
   }
 };
 
 exports.FindModels = async (req, res) => {
   try {
-    let allModels = await Car.findOne({ make: req.params.make }, { models: 1 });
+    let allModels = await Bike.findOne(
+      { make: req.params.make },
+      { models: 1 }
+    );
 
     if (allModels.length < 1) {
       return res.json({
@@ -77,14 +80,14 @@ exports.FindModels = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       error: true,
-      message: "Cannot find the given car",
+      message: "Cannot find the given bike",
     });
   }
 };
 
 exports.FindModel = async (req, res) => {
   try {
-    let oneModel = await Car.findOne(
+    let oneModel = await Bike.findOne(
       { make: req.params.make },
       { models: { $elemMatch: { name: req.params.model } } }
     );
@@ -106,9 +109,9 @@ exports.FindModel = async (req, res) => {
   }
 };
 
-exports.AddCar = async (req, res) => {
+exports.AddBike = async (req, res) => {
   try {
-    const result = carSchema.validate(req.body);
+    const result = bikeSchema.validate(req.body);
     if (result.error) {
       console.log(result.error.message);
       return res.json({
@@ -118,11 +121,11 @@ exports.AddCar = async (req, res) => {
       });
     }
 
-    let car = await Car.findOne({
+    let bike = await Bike.findOne({
       make: result.value.make,
     });
 
-    if (car) {
+    if (bike) {
       return res.json({
         error: true,
         message: "Make already exist",
@@ -130,26 +133,26 @@ exports.AddCar = async (req, res) => {
     }
 
     const id = uuid();
-    result.value.carId = id;
+    result.value.bikeId = id;
 
-    const newCar = new Car(result.value);
+    const newBike = new Bike(result.value);
 
-    await newCar.save();
+    await newBike.save();
 
     return res.status(201).json({
       success: true,
-      message: "Car Make added to the DB",
+      message: "Bike Make added to the DB",
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       error: true,
-      message: "Cannot add the car make",
+      message: "Cannot add the bike make",
     });
   }
 };
 
-exports.AddReview = async (req, res) => {
+exports.AddBike = async (req, res) => {
   try {
     const result = reviewSchema.validate(req.body);
     if (result.error) {
@@ -161,7 +164,7 @@ exports.AddReview = async (req, res) => {
       });
     }
 
-    await Car.updateOne(
+    await Bike.updateOne(
       { make: req.params.make, "models.name": req.params.model },
       { $push: { "models.$.reviews": result.value } }
     );
@@ -174,7 +177,7 @@ exports.AddReview = async (req, res) => {
   console.error(error);
   return res.status(500).json({
     error: true,
-    message: "Cannot add the car review",
+    message: "Cannot add the bike review",
   });
 };
 
@@ -190,7 +193,7 @@ exports.EditReview = async (req, res) => {
       });
     }
 
-    const tempCar = await Car.findOneAndUpdate(
+    await Bike.findOneAndUpdate(
       {
         make: req.params.make,
       },
@@ -211,14 +214,14 @@ exports.EditReview = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       error: true,
-      message: "Cannot add the car review",
+      message: "Cannot add the bike review",
     });
   }
 };
 
 exports.DeleteReview = async (req, res) => {
   try {
-    const tempCar = await Car.findOneAndUpdate(
+    await Bike.findOneAndUpdate(
       {
         make: req.params.make,
       },

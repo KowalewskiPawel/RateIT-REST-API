@@ -28,8 +28,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(restrictedOrigins);
 
 app.use("/users", require("./routes/users"));
-
 app.use("/cars", require("./routes/cars"));
+app.use("/bikes", require("./routes/bikes"));
 
 app.get("/ping", (req, res) => {
   return res.send({
