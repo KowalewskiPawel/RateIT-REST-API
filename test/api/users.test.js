@@ -1,11 +1,8 @@
-const express = require("express");
-const chai = require("chai");
+const chai = require("chai").expect;
 const request = require("supertest");
-const { expect } = require("chai");
+const app = require("../../app.js");
 
 require("dotenv").config();
-
-const app = express();
 
 describe("POST Create New User", () => {
   it("shouldn't accept empty email field", () => {

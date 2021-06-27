@@ -23,7 +23,7 @@ const userSchema = Joi.object().keys({
   referrer: Joi.string(),
 });
 
-exports.Signup = async (req, res) => {
+const Signup = async (req, res) => {
   try {
     const result = userSchema.validate(req.body);
     if (result.error) {
@@ -83,7 +83,7 @@ exports.Signup = async (req, res) => {
   }
 };
 
-exports.Login = async (req, res) => {
+const Login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -145,7 +145,7 @@ exports.Login = async (req, res) => {
   }
 };
 
-exports.Activate = async (req, res) => {
+const Activate = async (req, res) => {
   try {
     const { email, code } = req.body;
     if (!email || !code) {
@@ -194,7 +194,7 @@ exports.Activate = async (req, res) => {
   }
 };
 
-exports.ForgotPassword = async (req, res) => {
+const ForgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
@@ -237,7 +237,7 @@ exports.ForgotPassword = async (req, res) => {
   }
 };
 
-exports.ResetPassword = async (req, res) => {
+const ResetPassword = async (req, res) => {
   try {
     const { token, newPassword, confirmPassword } = req.body;
     if (!token || !newPassword || !confirmPassword) {
@@ -283,7 +283,7 @@ exports.ResetPassword = async (req, res) => {
   }
 };
 
-exports.Logout = async (req, res) => {
+const Logout = async (req, res) => {
   try {
     const { id } = req.decoded;
 
@@ -303,7 +303,7 @@ exports.Logout = async (req, res) => {
   }
 };
 
-exports.ReferredAccounts = async (req, res) => {
+const ReferredAccounts = async (req, res) => {
   try {
     const { referralCode } = req.decoded; //Destruction syntax
 
@@ -323,4 +323,14 @@ exports.ReferredAccounts = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+module.exports = {
+  Signup,
+  Login,
+  Activate,
+  ResetPassword,
+  ForgotPassword,
+  Logout,
+  ReferredAccounts,
 };
