@@ -1,5 +1,6 @@
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const options = {
   expiresIn: "1h",
@@ -15,4 +16,4 @@ async function generateJwt(email, userId) {
   }
 }
 
-module.exports = { generateJwt };
+export default generateJwt;

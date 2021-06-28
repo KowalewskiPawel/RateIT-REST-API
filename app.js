@@ -1,9 +1,12 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-require("dotenv").config();
+import express from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
+import router from "./routes/users.js";
 
-const restrictedOrigins = require("./middlewares/restrictedOrigins");
+dotenv.config();
+
+//const restrictedOrigins = require("./middlewares/restrictedOrigins");
 
 const app = express();
 
@@ -25,9 +28,9 @@ mongoose
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(restrictedOrigins);
+//app.use(restrictedOrigins);
 
-app.use("/users", require("./routes/users"));
+app.use("/users", router);
 //app.use("/cars", require("./routes/cars"));
 //app.use("/bikes", require("./routes/bikes"));
 
@@ -41,3 +44,5 @@ app.get("/ping", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Listening on PORT: ${PORT}`);
 });
+
+export default app;

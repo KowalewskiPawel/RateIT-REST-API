@@ -1,11 +1,12 @@
-const chai = require("chai").expect;
-const request = require("supertest");
-const app = require("../../app.js");
+import request from "supertest";
+import { expect } from "chai";
+import dotenv from "dotenv";
+dotenv.config();
 
-require("dotenv").config();
+import app from "../../app.js";
 
 describe("POST Create New User", () => {
-  it("shouldn't accept empty email field", () => {
+  it("shouldn't accept empty email field", (done) => {
     request(app)
       .post("/users/signup")
       .send({ email: "", password: "asdf", confirmPassword: "asdf" })
@@ -13,6 +14,10 @@ describe("POST Create New User", () => {
       .then((res) => {
         const body = res.body.json();
         expect(body.message).to.be.eql('"email" is not allowed to be empty');
+        done();
+      })
+      .catch((err) => {
+        done(err);
       });
   });
 

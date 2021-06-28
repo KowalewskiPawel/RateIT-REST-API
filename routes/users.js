@@ -1,9 +1,9 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const cleanBody = require("../middlewares/cleanbody");
-const AuthController = require("../users/user.controller");
-const { validateToken } = require("../middlewares/validateToken");
+import cleanBody from "../middlewares/cleanbody.js";
+import * as AuthController from "../users/user.controller.js";
+import validateToken from "../middlewares/validateToken.js";
 
 router.post("/signup", cleanBody, AuthController.Signup);
 
@@ -19,4 +19,4 @@ router.get("/logout", validateToken, AuthController.Logout);
 
 router.get("/referred", validateToken, AuthController.ReferredAccounts);
 
-module.exports = router;
+export default router;
