@@ -5,14 +5,18 @@ dotenv.config();
 
 import app from "../../app.js";
 
+before(function (done) {
+  this.timeout(3000); // A very long environment setup.
+  setTimeout(done, 2000);
+});
+
 describe("POST Create New User", () => {
   it("shouldn't accept empty email field", (done) => {
     request(app)
       .post("/users/signup")
       .send({ email: "", password: "asdf", confirmPassword: "asdf" })
-      .expect(400)
       .then((res) => {
-        const body = res.body.json();
+        const body = res.body;
         expect(body.message).to.be.eql('"email" is not allowed to be empty');
         done();
       })
