@@ -6,7 +6,7 @@ dotenv.config();
 import app from "../../app.js";
 
 before(function (done) {
-  this.timeout(3000); // A very long environment setup.
+  this.timeout(3000);
   setTimeout(done, 2000);
 });
 
@@ -15,9 +15,11 @@ describe("POST Create New User", () => {
     request(app)
       .post("/users/signup")
       .send({ email: "", password: "asdf", confirmPassword: "asdf" })
+      .expect(400)
       .then((res) => {
-        const body = res.body;
-        expect(body.message).to.be.eql('"email" is not allowed to be empty');
+        expect(res.body.message).to.be.eql(
+          '"email" is not allowed to be empty'
+        );
         done();
       })
       .catch((err) => {
@@ -25,7 +27,7 @@ describe("POST Create New User", () => {
       });
   });
 
-  it("shouldn't accept passwords that don't match", () => {
+  it("shouldn't accept passwords that don't match", (done) => {
     request(app)
       .post("/users/signup")
       .send({
@@ -35,14 +37,15 @@ describe("POST Create New User", () => {
       })
       .expect(400)
       .then((res) => {
-        const body = res.body.json();
-        expect(body.message).to.be.eql(
+        expect(res.body.message).to.be.eql(
           '"confirmPassword" must be [ref:password]'
         );
-      });
+        done();
+      })
+      .catch((err) => done(err));
   });
 
-  it("shouldn't accept email that already exists", () => {
+  it("shouldn't accept email that already exists", (done) => {
     request(app)
       .post("/users/signup")
       .send({
@@ -52,14 +55,15 @@ describe("POST Create New User", () => {
       })
       .expect(200)
       .then((res) => {
-        const body = res.body.json();
-        expect(body.message).to.be.eql("Email is already in use");
-      });
+        expect(res.body.message).to.be.eql("Email is already in use");
+        done();
+      })
+      .catch((err) => done(err));
   });
 });
 
 describe("POST Login", () => {
-  it("should accept exisiting user with correct credentials", () => {
+  it("should accept exisiting user with correct credentials", (done) => {
     request(app)
       .post("/users/login")
       .send({
@@ -68,12 +72,13 @@ describe("POST Login", () => {
       })
       .expect(200)
       .then((res) => {
-        const body = res.json();
-        expect(body.message).to.be.eql("User logged in successfully");
-      });
+        expect(res.body.message).to.be.eql("User logged in successfully");
+        done();
+      })
+      .catch((err) => done(err));
   });
 
-  it("shouldn't accept invalid credentials", () => {
+  it("shouldn't accept invalid credentials", (done) => {
     request(app)
       .post("/users/login")
       .send({
@@ -82,14 +87,15 @@ describe("POST Login", () => {
       })
       .expect(400)
       .then((res) => {
-        const body = res.json();
-        expect(body.message).to.be.eql("Invalid credentials");
-      });
+        expect(res.body.message).to.be.eql("Invalid credentials");
+        done();
+      })
+      .catch((err) => done(err));
   });
 });
 
 describe("PATCH Activating the user account", () => {
-  it("shouldn't accept invalid code", () => {
+  it("shouldn't accept invalid code", (done) => {
     request(app)
       .patch("/users/activate")
       .send({
@@ -98,14 +104,15 @@ describe("PATCH Activating the user account", () => {
       })
       .expect(400)
       .then((res) => {
-        const body = res.json();
-        expect(body.message).to.be.eql("Invalid details");
-      });
+        expect(res.body.message).to.be.eql("Invalid details");
+        done();
+      })
+      .catch((err) => done(err));
   });
 });
 
 describe("PATCH Forgot the password", () => {
-  it("should accept the exisiting account", () => {
+  it("should accept the exisiting account", (done) => {
     request(app)
       .patch("/users/forgot")
       .send({
@@ -113,14 +120,15 @@ describe("PATCH Forgot the password", () => {
       })
       .expect(200)
       .then((res) => {
-        const body = res.json();
-        expect(body.message).to.be.eql(
+        expect(res.body.message).to.be.eql(
           "Please check your email inbox for the reset code"
         );
-      });
+        done();
+      })
+      .catch((err) => done(err));
   });
 
-  it("shouldn't accept the wrong email address", () => {
+  it("shouldn't accept the wrong email address", (done) => {
     request(app)
       .patch("/users/forgot")
       .send({
@@ -128,8 +136,11 @@ describe("PATCH Forgot the password", () => {
       })
       .expect(500)
       .then((res) => {
-        const body = res.json();
-        expect(body.message).to.be.eql("Cannot read property 'email' of null");
-      });
+        expect(res.body.message).to.be.eql(
+          "Cannot read property 'email' of null"
+        );
+        done();
+      })
+      .catch((err) => done(err));
   });
 });

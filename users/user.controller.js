@@ -33,7 +33,7 @@ const Signup = async (req, res) => {
     const result = userSchema.validate(req.body);
     if (result.error) {
       console.log(result.error.message);
-      return res.json({
+      return res.status(400).json({
         error: true,
         status: 400,
         message: result.error.message,
