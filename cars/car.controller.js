@@ -1,7 +1,9 @@
-const Joi = require("joi");
-const { v4: uuid } = require("uuid");
+import Joi from "joi";
+import dotenv from "dotenv";
+dotenv.config();
+import { v4 as uuid } from "uuid";
 
-const Car = require("./car.model");
+import Car from "./car.model.js";
 
 const carSchema = Joi.object().keys({
   make: Joi.string().required().min(2),
@@ -18,18 +20,18 @@ const reviewSchema = Joi.object().keys({
   User: Joi.string().required().min(2),
 });
 
-exports.Cars = async (req, res) => {
+const Cars = async (req, res) => {
   try {
     let cars = await Car.find({});
 
     if (cars.length < 1) {
-      return res.json({
+      return res.status(404).json({
         error: true,
         status: 404,
         message: "No Cars in the DB",
       });
     }
-    return res.json(cars);
+    return res.status(200).json(cars);
   } catch (err) {
     console.error(err);
     return res.status(500).json({
@@ -39,19 +41,19 @@ exports.Cars = async (req, res) => {
   }
 };
 
-exports.FindCar = async (req, res) => {
+const FindCar = async (req, res) => {
   try {
     let car = await Car.find({ make: req.params.make });
 
     if (car.length < 1) {
-      return res.json({
+      return res.status(404).json({
         error: true,
         status: 404,
         message: "Make doesn't exist",
       });
     }
 
-    return res.json(car);
+    return res.status(200).json(car);
   } catch (err) {
     console.error(err);
     return res.status(500).json({
@@ -61,18 +63,18 @@ exports.FindCar = async (req, res) => {
   }
 };
 
-exports.FindModels = async (req, res) => {
+const FindModels = async (req, res) => {
   try {
     let allModels = await Car.findOne({ make: req.params.make }, { models: 1 });
 
     if (allModels.length < 1) {
-      return res.json({
+      return res.status(404).json({
         error: true,
         status: 404,
         message: "Make doesn't exist",
       });
     }
-    return res.json(allModels);
+    return res.status(200).json(allModels);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -82,7 +84,7 @@ exports.FindModels = async (req, res) => {
   }
 };
 
-exports.FindModel = async (req, res) => {
+const FindModel = async (req, res) => {
   try {
     let oneModel = await Car.findOne(
       { make: req.params.make },
@@ -90,13 +92,13 @@ exports.FindModel = async (req, res) => {
     );
 
     if (oneModel.models.length < 1) {
-      return res.json({
+      return res.status(404).json({
         error: true,
         status: 404,
         message: "Model doesn't exist",
       });
     }
-    return res.json(oneModel);
+    return res.status(200).json(oneModel);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -106,12 +108,12 @@ exports.FindModel = async (req, res) => {
   }
 };
 
-exports.AddCar = async (req, res) => {
+const AddCar = async (req, res) => {
   try {
     const result = carSchema.validate(req.body);
     if (result.error) {
       console.log(result.error.message);
-      return res.json({
+      return res.status(400).json({
         error: true,
         status: 400,
         message: result.error.message,
@@ -123,7 +125,7 @@ exports.AddCar = async (req, res) => {
     });
 
     if (car) {
-      return res.json({
+      return res.status(409).json({
         error: true,
         message: "Make already exist",
       });
@@ -149,12 +151,12 @@ exports.AddCar = async (req, res) => {
   }
 };
 
-exports.AddReview = async (req, res) => {
+const AddReview = async (req, res) => {
   try {
     const result = reviewSchema.validate(req.body);
     if (result.error) {
       console.log(result.error.message);
-      return res.json({
+      return res.status(400).json({
         error: true,
         status: 400,
         message: result.error.message,
@@ -178,19 +180,19 @@ exports.AddReview = async (req, res) => {
   });
 };
 
-exports.EditReview = async (req, res) => {
+const EditReview = async (req, res) => {
   try {
     const result = reviewSchema.validate(req.body);
     if (result.error) {
       console.log(result.error.message);
-      return res.json({
+      return res.status(400).json({
         error: true,
         status: 400,
         message: result.error.message,
       });
     }
 
-    const tempCar = await Car.findOneAndUpdate(
+    await Car.findOneAndUpdate(
       {
         make: req.params.make,
       },
@@ -216,9 +218,9 @@ exports.EditReview = async (req, res) => {
   }
 };
 
-exports.DeleteReview = async (req, res) => {
+const DeleteReview = async (req, res) => {
   try {
-    const tempCar = await Car.findOneAndUpdate(
+    await Car.findOneAndUpdate(
       {
         make: req.params.make,
       },
@@ -242,4 +244,15 @@ exports.DeleteReview = async (req, res) => {
       message: "Cannot delete the review",
     });
   }
+};
+
+export {
+  Cars,
+  FindCar,
+  FindModels,
+  FindModel,
+  AddCar,
+  AddReview,
+  EditReview,
+  DeleteReview,
 };

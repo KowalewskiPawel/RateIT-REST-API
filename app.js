@@ -2,7 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import router from "./routes/users.js";
+import usersRouter from "./routes/users.js";
+import carsRouter from "./routes/cars.js";
+import bikesRouter from "./routes/bikes.js";
 
 dotenv.config();
 
@@ -30,9 +32,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //app.use(restrictedOrigins);
 
-app.use("/users", router);
-//app.use("/cars", require("./routes/cars"));
-//app.use("/bikes", require("./routes/bikes"));
+app.use("/users", usersRouter);
+app.use("/cars", carsRouter);
+app.use("/bikes", bikesRouter);
 
 app.get("/ping", (req, res) => {
   return res.send({

@@ -1,34 +1,38 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+const bikesRouter = express.Router();
 
-const cleanBody = require("../middlewares/cleanbody");
-const BikeController = require("../bikes/bike.controller.js");
-const { validateToken } = require("../middlewares/validateToken");
+import cleanBody from "../middlewares/cleanbody.js";
+import * as BikeController from "../bikes/bike.controller.js";
+import validateToken from "../middlewares/validateToken.js";
 
-router.get("/", BikeController.Bikes);
+bikesRouter.get("/", BikeController.Bikes);
 
-router.get("/:make", BikeController.FindBike);
+bikesRouter.get("/:make", BikeController.FindBike);
 
-router.get("/:make/all", BikeController.FindModels);
+bikesRouter.get("/:make/all", BikeController.FindModels);
 
-router.get("/:make/:model", BikeController.FindModel);
+bikesRouter.get("/:make/:model", BikeController.FindModel);
 
-router.post("/", validateToken, cleanBody, BikeController.AddBike);
+bikesRouter.post("/", validateToken, cleanBody, BikeController.AddBike);
 
-router.post(
+bikesRouter.post(
   "/:make/:model",
   validateToken,
   cleanBody,
   BikeController.AddReview
 );
 
-router.put(
+bikesRouter.put(
   "/:make/:model/:_id",
   validateToken,
   cleanBody,
   BikeController.EditReview
 );
 
-router.delete("/:make/:model/:_id", validateToken, BikeController.DeleteReview);
+bikesRouter.delete(
+  "/:make/:model/:_id",
+  validateToken,
+  BikeController.DeleteReview
+);
 
-module.exports = router;
+export default bikesRouter;

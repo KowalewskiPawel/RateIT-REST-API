@@ -1,29 +1,38 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+const carsRouter = express.Router();
 
-const cleanBody = require("../middlewares/cleanbody");
-const CarController = require("../cars/car.controller.js");
-const { validateToken } = require("../middlewares/validateToken");
+import cleanBody from "../middlewares/cleanbody.js";
+import * as CarController from "../cars/car.controller.js";
+import validateToken from "../middlewares/validateToken.js";
 
-router.get("/", CarController.Cars);
+carsRouter.get("/", CarController.Cars);
 
-router.get("/:make", CarController.FindCar);
+carsRouter.get("/:make", CarController.FindCar);
 
-router.get("/:make/all", CarController.FindModels);
+carsRouter.get("/:make/all", CarController.FindModels);
 
-router.get("/:make/:model", CarController.FindModel);
+carsRouter.get("/:make/:model", CarController.FindModel);
 
-router.post("/", validateToken, cleanBody, CarController.AddCar);
+carsRouter.post("/", validateToken, cleanBody, CarController.AddCar);
 
-router.post("/:make/:model", validateToken, cleanBody, CarController.AddReview);
+carsRouter.post(
+  "/:make/:model",
+  validateToken,
+  cleanBody,
+  CarController.AddReview
+);
 
-router.put(
+carsRouter.put(
   "/:make/:model/:_id",
   validateToken,
   cleanBody,
   CarController.EditReview
 );
 
-router.delete("/:make/:model/:_id", validateToken, CarController.DeleteReview);
+carsRouter.delete(
+  "/:make/:model/:_id",
+  validateToken,
+  CarController.DeleteReview
+);
 
-module.exports = router;
+export default carsRouter;
