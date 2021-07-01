@@ -77,7 +77,7 @@ const FindModels = async (req, res) => {
         message: "Make doesn't exist",
       });
     }
-    return res.json(allModels);
+    return res.status(200).json(allModels);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
