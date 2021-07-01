@@ -116,7 +116,26 @@ describe("Bikes POST", () => {
   });
 
   it("should add new review to the given model", (done) => {
-    request(app).post(`/bikes/test/${bikeID}`);
+    request(app)
+      .post("/bikes/test/testModel1")
+      .set({
+        Authorization: tempToken,
+      })
+      .send({
+        Version: "Test",
+        Year: 2020,
+        Engine: "11",
+        General: "Very pretty and sweet car I loved it so much.",
+        Pros: "Very good for travelling",
+        Cons: "Consumes a bit too much",
+        User: "Pawel",
+      })
+      .expect(201)
+      .then((res) => {
+        expect(res.body.message).to.be.eql("Review added to the DB");
+        done();
+      })
+      .catch((err) => done(err));
   });
 
   after(async () => {
