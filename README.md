@@ -18,7 +18,7 @@ Backend for the RateIT project - interactive platform for sharing cars and motor
 
 This API currently uses 3 main routes, for managing users, cars and motorbikes.
 
-### Users
+## Users
 
 - Signup
 
@@ -102,7 +102,7 @@ Body example: `{
 
 AuthHeader example: `Authorization: Bearer <token>`
 
-### Bikes
+## Bikes
 
 - Retrieve Bikes
 
@@ -214,4 +214,118 @@ AuthHeader example: `Authorization: Bearer <token>`
 
 
 AuthHeader example: `Authorization: Bearer <token>`
+
+## Cars
+
+- Retrieve Cars
+
+| Name     | Cars           |
+| ------------- |:-------------:|
+| Method | GET |
+| endpoint      | `<host>/cars` |
+| Body      | NO |
+| AuthHeader | NO |
+
+- Find One Car
+
+| Name     |       FindCar     |
+| ------------- |:-------------:|
+| Method | GET |
+| endpoint      | `<host>/cars/:make` |
+| Body      | NO |
+| AuthHeader | NO |
+
+- Find All Models of a Specific Car Make
+
+| Name     |       FindModels     |
+| ------------- |:-------------:|
+| Method | GET |
+| endpoint      | `<host>/cars/:make/all` |
+| Body      | NO |
+| AuthHeader | NO |
+
+- Find One Model of a Specific Car Make
+
+| Name     |       FindModel     |
+| ------------- |:-------------:|
+| Method | GET |
+| endpoint      | `<host>/cars/:make/:model` |
+| Body      | NO |
+| AuthHeader | NO |
+
+- Add New Car to the DB
+
+| Name     |     AddCar       |
+| ------------- |:-------------:|
+| Method | POST |
+| endpoint      | `<host>/cars/` |
+| Body      | YES |
+| AuthHeader | YES |
+
+Body example: `{
+    "make": "name",
+    "models": [
+        {"name": "name",
+        "reviews": []}
+    ]
+}`
+
+AuthHeader example: `Authorization: Bearer <token>`
+
+
+- Add New Review to the Given Car
+
+| Name     |     AddReview       |
+| ------------- |:-------------:|
+| Method | POST |
+| endpoint      | `<host>/cars/:make/:model` |
+| Body      | YES |
+| AuthHeader | YES |
+
+Body example: `{
+    "Version": "name",
+    "Year": Number,
+    "Engine": "name",
+    "General": "text",
+    "Pros": "text",
+    "Cons": "text",
+    "User": "userName"
+}`
+
+AuthHeader example: `Authorization: Bearer <token>`
+
+- Edit the Review of the Given Car
+
+| Name     |     EditReview       |
+| ------------- |:-------------:|
+| Method | PUT |
+| endpoint      | `<host>/cars/:make/:model/:_id` |
+| Body      | YES |
+| AuthHeader | YES |
+
+Body example: `{
+    "Version": "name",
+    "Year": Number,
+    "Engine": "name",
+    "General": "text",
+    "Pros": "text",
+    "Cons": "text",
+    "User": "userName"
+}`
+
+AuthHeader example: `Authorization: Bearer <token>`
+
+
+- Delete the Review of the Given Car
+
+| Name     |     DeleteReview       |
+| ------------- |:-------------:|
+| Method | DELETE |
+| endpoint      | `<host>/cars/:make/:model/:_id` |
+| Body      | NO |
+| AuthHeader | YES |
+
+
+AuthHeader example: `Authorization: Bearer <token>`
+
 
