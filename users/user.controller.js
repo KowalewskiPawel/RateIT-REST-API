@@ -1,13 +1,18 @@
-const Joi = require("joi");
-require("dotenv").config();
-const { v4: uuid } = require("uuid");
+import Joi from "joi";
+import dotenv from "dotenv";
+dotenv.config();
+import { v4 as uuid } from "uuid";
 
-const { customAlphabet: generate } = require("nanoid");
+import { customAlphabet as generate } from "nanoid";
 
-const { generateJwt } = require("./helpers/generateJwt");
-const { sendEmail } = require("./helpers/mailer");
+import generateJwt from "./helpers/generateJwt.js";
+import sendEmail from "./helpers/mailer.js";
 
-const User = require("./user.model");
+import User from "./user.model.js";
+
+import hashPassword from "./helpers/hashPassword.js";
+
+import comparePasswords from "./helpers/comparePasswords.js";
 
 const CHARACTER_SET =
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -28,7 +33,7 @@ const Signup = async (req, res) => {
     const result = userSchema.validate(req.body);
     if (result.error) {
       console.log(result.error.message);
-      return res.json({
+      return res.status(400).json({
         error: true,
         status: 400,
         message: result.error.message,
@@ -42,11 +47,12 @@ const Signup = async (req, res) => {
     if (user) {
       return res.json({
         error: true,
+        status: 400,
         message: "Email is already in use",
       });
     }
 
-    const hash = await User.hashPassword(result.value.password);
+    const hash = await hashPassword(result.value.password);
 
     const id = uuid();
     result.value.userId = id;
@@ -110,7 +116,7 @@ const Login = async (req, res) => {
       });
     }
 
-    const isValid = await User.comparePasswords(password, user.password);
+    const isValid = await comparePasswords(password, user.password);
 
     if (!isValid) {
       return res.status(400).json({
@@ -263,7 +269,7 @@ const ResetPassword = async (req, res) => {
         message: "Passwords didn't match",
       });
     }
-    const hash = await User.hashPassword(req.body.newPassword);
+    const hash = await hashPassword(req.body.newPassword);
     user.password = hash;
     user.resetPasswordToken = null;
     user.resetPasswordExpires = "";
@@ -325,12 +331,12 @@ const ReferredAccounts = async (req, res) => {
   }
 };
 
-module.exports = {
-  Signup,
+export {
   Login,
+  Signup,
   Activate,
-  ResetPassword,
   ForgotPassword,
+  ResetPassword,
   Logout,
   ReferredAccounts,
 };

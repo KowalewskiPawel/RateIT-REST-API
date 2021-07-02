@@ -1,6 +1,6 @@
-const sanitize = require("mongo-sanitize");
+import sanitize from "mongo-sanitize";
 
-module.exports = (req, res, next) => {
+const cleanBody = (req, res, next) => {
   try {
     req.body = sanitize(req.body);
     next();
@@ -12,3 +12,5 @@ module.exports = (req, res, next) => {
     });
   }
 };
+
+export default cleanBody;

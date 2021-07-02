@@ -1,22 +1,22 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+const usersRouter = express.Router();
 
-const cleanBody = require("../middlewares/cleanbody");
-const AuthController = require("../users/user.controller");
-const { validateToken } = require("../middlewares/validateToken");
+import cleanBody from "../middlewares/cleanbody.js";
+import * as AuthController from "../users/user.controller.js";
+import validateToken from "../middlewares/validateToken.js";
 
-router.post("/signup", cleanBody, AuthController.Signup);
+usersRouter.post("/signup", cleanBody, AuthController.Signup);
 
-router.post("/login", cleanBody, AuthController.Login);
+usersRouter.post("/login", cleanBody, AuthController.Login);
 
-router.patch("/activate", cleanBody, AuthController.Activate);
+usersRouter.patch("/activate", cleanBody, AuthController.Activate);
 
-router.patch("/forgot", cleanBody, AuthController.ForgotPassword);
+usersRouter.patch("/forgot", cleanBody, AuthController.ForgotPassword);
 
-router.patch("/reset", cleanBody, AuthController.ResetPassword);
+usersRouter.patch("/reset", cleanBody, AuthController.ResetPassword);
 
-router.get("/logout", validateToken, AuthController.Logout);
+usersRouter.get("/logout", validateToken, AuthController.Logout);
 
-router.get("/referred", validateToken, AuthController.ReferredAccounts);
+usersRouter.get("/referred", validateToken, AuthController.ReferredAccounts);
 
-module.exports = router;
+export default usersRouter;
