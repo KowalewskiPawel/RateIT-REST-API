@@ -158,3 +158,60 @@ Body example: `{
 }`
 
 AuthHeader example: `Authorization: Bearer <token>`
+
+
+- Add New Review to the Given Bike
+
+| Name     |     AddReview       |
+| ------------- |:-------------:|
+| Method | POST |
+| endpoint      | `<host>/bikes/:make/:model` |
+| Body      | YES |
+| AuthHeader | YES |
+
+Body example: `{
+    "Version": "name",
+    "Year": Number,
+    "Engine": "name",
+    "General": "text",
+    "Pros": "text",
+    "Cons": "text",
+    "User": "userName"
+}`
+
+AuthHeader example: `Authorization: Bearer <token>`
+
+- Edit the Review of the Given Bike
+
+| Name     |     EditReview       |
+| ------------- |:-------------:|
+| Method | PUT |
+| endpoint      | `<host>/bikes/:make/:model/:_id` |
+| Body      | YES |
+| AuthHeader | YES |
+
+Body example: `{
+    "Version": "name",
+    "Year": Number,
+    "Engine": "name",
+    "General": "text",
+    "Pros": "text",
+    "Cons": "text",
+    "User": "userName"
+}`
+
+AuthHeader example: `Authorization: Bearer <token>`
+
+
+- Delete the Review of the Given Bike
+
+| Name     |     DeleteReview       |
+| ------------- |:-------------:|
+| Method | DELETE |
+| endpoint      | `<host>/bikes/:make/:model/:_id` |
+| Body      | NO |
+| AuthHeader | YES |
+
+
+AuthHeader example: `Authorization: Bearer <token>`
+
