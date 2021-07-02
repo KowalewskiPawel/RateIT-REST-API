@@ -3,11 +3,11 @@ import { expect } from "chai";
 import dotenv from "dotenv";
 dotenv.config();
 
-import Bike from "../../bikes/bike.model.js";
+import Car from "../../cars/car.model.js";
 
 import app from "../../app.js";
 
-const tempBike = {
+const tempCar = {
   make: "test",
   models: [
     {
@@ -19,7 +19,7 @@ const tempBike = {
 
 let tempToken;
 
-let bikeID;
+let carID;
 
 before(function (done) {
   this.timeout(3000);
@@ -45,19 +45,19 @@ before(async () => {
   }
 });
 
-describe("GET bikes", () => {
+describe("GET cars", () => {
   before(async () => {
     try {
-      const testBike = new Bike(tempBike);
-      await testBike.save();
+      const testCar = new Car(tempCar);
+      await testCar.save();
     } catch (err) {
       console.error(err);
     }
   });
 
-  it("should retrieve all of the bikes available in the DB", (done) => {
+  it("should retrieve all of the car available in the DB", (done) => {
     request(app)
-      .get("/bikes/")
+      .get("/cars/")
       .expect(200)
       .then((res) => {
         expect(res.body[0].make).to.be.eql("test");
@@ -66,9 +66,9 @@ describe("GET bikes", () => {
       .catch((err) => done(err));
   });
 
-  it("should return the given bike model", (done) => {
+  it("should return the given car model", (done) => {
     request(app)
-      .get("/bikes/test")
+      .get("/cars/test")
       .expect(200)
       .then((res) => {
         expect(res.body[0].make).to.be.eql("test");
@@ -77,9 +77,9 @@ describe("GET bikes", () => {
       .catch((err) => done(err));
   });
 
-  it("should return the array of the given bike models", (done) => {
+  it("should return the array of the given car models", (done) => {
     request(app)
-      .get("/bikes/test/all")
+      .get("/cars/test/all")
       .expect(200)
       .then((res) => {
         expect(res.body.models[0].name).to.be.eql("testModel1");
@@ -90,24 +90,24 @@ describe("GET bikes", () => {
 
   after(async () => {
     try {
-      await Bike.deleteOne({ make: "test" });
+      await Car.deleteOne({ make: "test" });
     } catch (err) {
       console.error(err);
     }
   });
 });
 
-describe("Bikes POST", () => {
-  it("should add bike to the DB", (done) => {
+describe("Cars POST", () => {
+  it("should add car to the DB", (done) => {
     request(app)
-      .post("/bikes/")
+      .post("/cars/")
       .set({
         Authorization: tempToken,
       })
-      .send(tempBike)
+      .send(tempCar)
       .expect(201)
       .then((res) => {
-        expect(res.body.message).to.be.eql("Bike Make added to the DB");
+        expect(res.body.message).to.be.eql("Car Make added to the DB");
         done();
       })
       .catch((err) => {
@@ -117,7 +117,7 @@ describe("Bikes POST", () => {
 
   it("should add new review to the given model", (done) => {
     request(app)
-      .post("/bikes/test/testModel1")
+      .post("/cars/test/testModel1")
       .set({
         Authorization: tempToken,
       })
@@ -140,17 +140,17 @@ describe("Bikes POST", () => {
 
   after(async () => {
     try {
-      await Bike.deleteOne({ make: "test" });
+      await Car.deleteOne({ make: "test" });
     } catch (err) {
       console.error(err);
     }
   });
 });
 
-describe("PUT bikes", () => {
+describe("PUT cars", () => {
   before(async () => {
     try {
-      const testBike = new Bike({
+      const testCar = new Car({
         make: "test",
         models: [
           {
@@ -169,9 +169,9 @@ describe("PUT bikes", () => {
           },
         ],
       });
-      const bike = await testBike.save();
+      const car = await testCar.save();
 
-      bikeID = await bike.models[0].reviews[0].id;
+      carID = await car.models[0].reviews[0].id;
     } catch (err) {
       console.error(err);
     }
@@ -179,7 +179,7 @@ describe("PUT bikes", () => {
 
   it("Users should be able to edit their reviews", (done) => {
     request(app)
-      .put(`/bikes/test/testModel1/${bikeID}`)
+      .put(`/cars/test/testModel1/${carID}`)
       .send({
         Version: "Test",
         Year: 2020,
@@ -202,7 +202,7 @@ describe("PUT bikes", () => {
 
   after(async () => {
     try {
-      await Bike.deleteOne({ make: "test" });
+      await Car.deleteOne({ make: "test" });
     } catch (err) {
       console.error(err);
     }
@@ -212,7 +212,7 @@ describe("PUT bikes", () => {
 describe("DELETE reviews", () => {
   before(async () => {
     try {
-      const testBike = new Bike({
+      const testCar = new Car({
         make: "test",
         models: [
           {
@@ -231,9 +231,9 @@ describe("DELETE reviews", () => {
           },
         ],
       });
-      const bike = await testBike.save();
+      const car = await testCar.save();
 
-      bikeID = await bike.models[0].reviews[0].id;
+      carID = await car.models[0].reviews[0].id;
     } catch (err) {
       console.error(err);
     }
@@ -241,7 +241,7 @@ describe("DELETE reviews", () => {
 
   it("Users should be able to delete their reviews", (done) => {
     request(app)
-      .delete(`/bikes/test/testModel1/${bikeID}`)
+      .delete(`/cars/test/testModel1/${carID}`)
       .send({
         Version: "Test",
         Year: 2020,
@@ -264,7 +264,7 @@ describe("DELETE reviews", () => {
 
   after(async () => {
     try {
-      await Bike.deleteOne({ make: "test" });
+      await Car.deleteOne({ make: "test" });
       await request(app)
         .get("/users/logout")
         .set({
