@@ -36,7 +36,7 @@ Body example: `{
 
 - Login
 
-| Name     | Signup           |
+| Name     | Login           |
 | ------------- |:-------------:|
 | endpoint      | `<host>/users/login` |
 | Body      | YES |
@@ -46,3 +46,53 @@ Body example: `{
     "email": "email",
     "password": "password",
 }`
+
+- Activate
+
+| Name     | Activate          |
+| ------------- |:-------------:|
+| endpoint      | `<host>/users/activate` |
+| Body      | YES |
+| AuthHeader | NO |
+
+Body example: `{
+    "email": "email",
+    "code": "code",
+}`
+
+- Forgot Password
+
+| Name     | Forgot           |
+| ------------- |:-------------:|
+| endpoint      | `<host>/users/forgot` |
+| Body      | YES |
+| AuthHeader | NO |
+
+Body example: `{
+    "email": "email",
+}`
+
+- Reset Password
+
+| Name     | Reset           |
+| ------------- |:-------------:|
+| endpoint      | `<host>/users/reset` |
+| Body      | YES |
+| AuthHeader | NO |
+
+Body example: `{
+    "token": "token",
+    "newPassword": "password",
+    "confirmPassword": "password"
+}`
+
+- Logout
+
+| Name     | Logout           |
+| ------------- |:-------------:|
+| endpoint      | `<host>/users/logout` |
+| Body      | NO |
+| AuthHeader | YES |
+
+AuthHeader example: `Authorization: Bearer <token>`
+
