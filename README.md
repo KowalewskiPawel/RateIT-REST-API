@@ -24,6 +24,7 @@ This API currently uses 3 main routes, for managing users, cars and motorbikes.
 
 | Name     | Signup           |
 | ------------- |:-------------:|
+| Method | POST |
 | endpoint      | `<host>/users/signup` |
 | Body      | YES |
 | AuthHeader | NO |
@@ -38,6 +39,7 @@ Body example: `{
 
 | Name     | Login           |
 | ------------- |:-------------:|
+| Method | POST |
 | endpoint      | `<host>/users/login` |
 | Body      | YES |
 | AuthHeader | NO |
@@ -51,6 +53,7 @@ Body example: `{
 
 | Name     | Activate          |
 | ------------- |:-------------:|
+| Method | PATCH |
 | endpoint      | `<host>/users/activate` |
 | Body      | YES |
 | AuthHeader | NO |
@@ -64,6 +67,7 @@ Body example: `{
 
 | Name     | Forgot           |
 | ------------- |:-------------:|
+| Method | PATCH |
 | endpoint      | `<host>/users/forgot` |
 | Body      | YES |
 | AuthHeader | NO |
@@ -76,6 +80,7 @@ Body example: `{
 
 | Name     | Reset           |
 | ------------- |:-------------:|
+| Method | PATCH |
 | endpoint      | `<host>/users/reset` |
 | Body      | YES |
 | AuthHeader | NO |
@@ -90,9 +95,66 @@ Body example: `{
 
 | Name     | Logout           |
 | ------------- |:-------------:|
+| Method | GET |
 | endpoint      | `<host>/users/logout` |
 | Body      | NO |
 | AuthHeader | YES |
 
 AuthHeader example: `Authorization: Bearer <token>`
 
+### Bikes
+
+- Retrieve Bikes
+
+| Name     | Bikes           |
+| ------------- |:-------------:|
+| Method | GET |
+| endpoint      | `<host>/bikes` |
+| Body      | NO |
+| AuthHeader | NO |
+
+- Find One Bike
+
+| Name     |       FindBike     |
+| ------------- |:-------------:|
+| Method | GET |
+| endpoint      | `<host>/bikes/:make` |
+| Body      | NO |
+| AuthHeader | NO |
+
+- Find All Models of a Specific Bike Make
+
+| Name     |       FindModels     |
+| ------------- |:-------------:|
+| Method | GET |
+| endpoint      | `<host>/bikes/:make/all` |
+| Body      | NO |
+| AuthHeader | NO |
+
+- Find One Model of a Specific Bike Make
+
+| Name     |       FindModel     |
+| ------------- |:-------------:|
+| Method | GET |
+| endpoint      | `<host>/bikes/:make/:model` |
+| Body      | NO |
+| AuthHeader | NO |
+
+- Add New Bike to the DB
+
+| Name     |     AddBike       |
+| ------------- |:-------------:|
+| Method | POST |
+| endpoint      | `<host>/bikes/` |
+| Body      | YES |
+| AuthHeader | YES |
+
+Body example: `{
+    "make": "name",
+    "models": [
+        {"name": "name",
+        "reviews": []}
+    ]
+}`
+
+AuthHeader example: `Authorization: Bearer <token>`
