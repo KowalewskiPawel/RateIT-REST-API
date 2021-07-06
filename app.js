@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import cors from "cors";
+
 import usersRouter from "./routes/users.js";
 import carsRouter from "./routes/cars.js";
 import bikesRouter from "./routes/bikes.js";
@@ -29,6 +31,8 @@ mongoose
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cors());
 
 //app.use(restrictedOrigins);
 

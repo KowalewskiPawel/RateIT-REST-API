@@ -14,18 +14,11 @@ import hashPassword from "./helpers/hashPassword.js";
 
 import comparePasswords from "./helpers/comparePasswords.js";
 
-const CHARACTER_SET =
-  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-const REFERRAL_CODE_LENGTH = 8;
-
-const referralCode = generate(CHARACTER_SET, REFERRAL_CODE_LENGTH);
-
 const userSchema = Joi.object().keys({
+  username: Joi.string().required().min(4),
   email: Joi.string().email({ minDomainSegments: 2 }),
   password: Joi.string().required().min(4),
   confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
-  referrer: Joi.string(),
 });
 
 const Signup = async (req, res) => {
@@ -266,7 +259,7 @@ const ResetPassword = async (req, res) => {
     if (newPassword !== confirmPassword) {
       return res.status(400).json({
         error: true,
-        message: "Passwords didn't match",
+        message: "Passwords don't match",
       });
     }
     const hash = await hashPassword(req.body.newPassword);
