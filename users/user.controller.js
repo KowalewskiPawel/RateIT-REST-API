@@ -93,7 +93,11 @@ const Login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.findOne({ username: email });
+    }
 
     if (!user) {
       return res.status(404).json({
@@ -134,6 +138,7 @@ const Login = async (req, res) => {
       success: true,
       message: "User logged in successfully",
       accessToken: token,
+      username: user.username,
     });
   } catch (err) {
     console.error(`Login error ${err}`);
