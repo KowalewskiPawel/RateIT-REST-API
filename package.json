@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha --recursive --exit --timeout 10000"
+    "test": "mocha --recursive --exit --timeout 10000",
+    "start": "node app"
   },
   "author": "Pawel Kowalewski",
   "license": "ISC",
