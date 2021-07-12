@@ -11,7 +11,7 @@ Backend for the RateIT project - interactive platform for sharing cars and motor
 5. Add SendInBlue API key to the .env file as `SI_APIKEY=<yourSendInBlueAPIaddress>`
 6. Add SendInBlue email address to the .env file as `SI_EMAIL=<yourSendInBlueEmailAddress`
 7. Add JWT secret key (it's up to your personal choice) to the .env file as `JWT_SECRET=<yourJWTsecretKey>`
-8. Type in `node app` to run the server
+8. Type in `npm start` to run the server
 9. Additionally, you may use command `npm test` for testing issues, but you will also have to add additional values to the .env file
 
 ## Routes
