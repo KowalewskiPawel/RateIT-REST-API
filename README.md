@@ -1,6 +1,6 @@
 # RateIT REST API
 
-Backend for the RateIT project - interactive platform for sharing cars and motorcycles reviews.
+REST API for the RateIT project - interactive platform for sharing cars and motorcycles reviews.
 
 ### Installation
 
