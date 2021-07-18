@@ -10,11 +10,16 @@ before(function (done) {
   setTimeout(done, 2000);
 });
 
+/*
+        email: process.env.USER_TEST,
+        password: process.env.USER_TEST_PASSWORD
+*/
+
 describe("POST Create New User", () => {
   it("shouldn't accept empty email field", (done) => {
     request(app)
       .post("/users/signup")
-      .send({ email: "", password: "asdf", confirmPassword: "asdf" })
+      .send({ email: "", password: process.env.USER_TEST_PASSWORD, confirmPassword: process.env.USER_TEST_PASSWORD })
       .expect(400)
       .then((res) => {
         expect(res.body.message).to.be.eql(
@@ -31,9 +36,9 @@ describe("POST Create New User", () => {
     request(app)
       .post("/users/signup")
       .send({
-        email: "user@reviwit.com",
-        password: "1234",
-        confirmPassword: "123456",
+        email: process.env.USER_TEST,
+        password: process.env.USER_TEST_PASSWORD,
+        confirmPassword: process.env.USER_TEST_PASSWORD + "abc",
       })
       .expect(400)
       .then((res) => {
@@ -50,8 +55,8 @@ describe("POST Create New User", () => {
       .post("/users/signup")
       .send({
         email: process.env.USER_TEST,
-        password: "1234",
-        confirmPassword: "1234",
+        password: process.env.USER_TEST_PASSWORD,
+        confirmPassword: process.env.USER_TEST_PASSWORD,
       })
       .expect(200)
       .then((res) => {

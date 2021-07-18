@@ -15,8 +15,6 @@ usersRouter.patch("/forgot", cleanBody, AuthController.ForgotPassword);
 
 usersRouter.patch("/reset", cleanBody, AuthController.ResetPassword);
 
-usersRouter.get("/logout", validateToken, AuthController.Logout);
-
-usersRouter.get("/referred", validateToken, AuthController.ReferredAccounts);
+usersRouter.patch("/logout", validateToken, AuthController.Logout);
 
 export default usersRouter;
