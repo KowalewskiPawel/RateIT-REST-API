@@ -36,7 +36,8 @@ async function sendEmail(email, code) {
       html: bodyHTML,
     };
 
-    let info = await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
+    
     return { error: false };
   } catch (error) {
     console.error(`send-email-error: ${error}`);

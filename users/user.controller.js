@@ -3,8 +3,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import { v4 as uuid } from "uuid";
 
-import { customAlphabet as generate } from "nanoid";
-
 import generateJwt from "./helpers/generateJwt.js";
 import sendEmail from "./helpers/mailer.js";
 
@@ -38,7 +36,7 @@ const Signup = async (req, res) => {
     });
 
     if (user) {
-      return res.json({
+      return res.status(400).json({
         error: true,
         status: 400,
         message: "Email is already in use",
@@ -73,6 +71,7 @@ const Signup = async (req, res) => {
       success: true,
       message: "Registration Success",
     });
+
   } catch (error) {
     console.error("signup-error", error);
     return res.status(500).json({
@@ -134,7 +133,7 @@ const Login = async (req, res) => {
 
     await user.save();
 
-    return res.send({
+    return res.status(200).json({
       success: true,
       message: "User logged in successfully",
       accessToken: token,
@@ -172,7 +171,7 @@ const Activate = async (req, res) => {
       });
     } else {
       if (user.active)
-        return res.send({
+        return res.status(400).json({
           error: true,
           message: "Account already activated",
           status: 400,
@@ -202,7 +201,7 @@ const ForgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
-      return res.send({
+      return res.status(400).json({
         status: 400,
         error: true,
         message: "Cannot be processed",
@@ -228,7 +227,7 @@ const ForgotPassword = async (req, res) => {
 
     await user.save();
 
-    return res.send({
+    return res.status(200).json({
       success: true,
       message: "Please check your email inbox for the reset code",
     });
@@ -256,7 +255,7 @@ const ResetPassword = async (req, res) => {
       resetPasswordExpires: { $gt: Date.now() },
     });
     if (!user) {
-      return res.send({
+      return res.status(400).json({
         error: true,
         message: "Password reset token is invalid or has expired.",
       });
@@ -274,7 +273,7 @@ const ResetPassword = async (req, res) => {
 
     await user.save();
 
-    return res.send({
+    return res.status(200).json({
       success: true,
       message: "Password has been changed",
     });
@@ -297,32 +296,10 @@ const Logout = async (req, res) => {
 
     await user.save();
 
-    return res.send({ success: true, message: "User Logged out" });
+    return res.status(201).json({ success: true, message: "User Logged out" });
   } catch (error) {
-    console.error("user-logout-error", error);
-    return res.stat(500).json({
-      error: true,
-      message: error.message,
-    });
-  }
-};
-
-const ReferredAccounts = async (req, res) => {
-  try {
-    const { referralCode } = req.decoded; //Destruction syntax
-
-    const referredAccounts = await User.find(
-      { referrer: referralCode },
-      { email: 1, referralCode: 1, _id: 0 }
-    );
-    return res.send({
-      success: true,
-      accounts: referredAccounts,
-      total: referredAccounts.length,
-    });
-  } catch (error) {
-    console.error("fetch-referred-error", error);
-    return res.stat(500).json({
+    console.error(error);
+    return res.status(500).json({
       error: true,
       message: error.message,
     });
@@ -336,5 +313,4 @@ export {
   ForgotPassword,
   ResetPassword,
   Logout,
-  ReferredAccounts,
 };
