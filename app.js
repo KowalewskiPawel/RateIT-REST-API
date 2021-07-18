@@ -2,13 +2,14 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import cors from "cors";
+import helmet from "helmet";
+
 import usersRouter from "./routes/users.js";
 import carsRouter from "./routes/cars.js";
 import bikesRouter from "./routes/bikes.js";
 
 dotenv.config();
-
-//const restrictedOrigins = require("./middlewares/restrictedOrigins");
 
 const app = express();
 
@@ -29,6 +30,13 @@ mongoose
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: "https://rateitapp.netlify.app",
+  })
+);
+app.use(helmet());
 
 //app.use(restrictedOrigins);
 

@@ -19,3 +19,4 @@ REST API for the RateIT project - interactive platform for sharing cars and moto
 This API currently uses 3 main routes, for managing users, cars and motorbikes.
 
 Documentation for the routes can be found [here](https://github.com/KowalewskiPawel/RateIT-REST-API/wiki/API-Routes)
+
