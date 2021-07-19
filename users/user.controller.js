@@ -19,7 +19,9 @@ const userSchema = Joi.object().keys({
   confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
 });
 
-const Signup = async (req, res) => {
+class AuthController {
+
+ async Signup (req, res) {
   try {
     const result = userSchema.validate(req.body);
     if (result.error) {
@@ -81,7 +83,7 @@ const Signup = async (req, res) => {
   }
 };
 
-const Login = async (req, res) => {
+async Login (req, res) {
   try {
     const { email, password } = req.body;
 
@@ -148,7 +150,7 @@ const Login = async (req, res) => {
   }
 };
 
-const Activate = async (req, res) => {
+async Activate (req, res) {
   try {
     const { email, code } = req.body;
     if (!email || !code) {
@@ -197,7 +199,7 @@ const Activate = async (req, res) => {
   }
 };
 
-const ForgotPassword = async (req, res) => {
+async ForgotPassword (req, res) {
   try {
     const { email } = req.body;
     if (!email) {
@@ -240,7 +242,7 @@ const ForgotPassword = async (req, res) => {
   }
 };
 
-const ResetPassword = async (req, res) => {
+async ResetPassword (req, res) {
   try {
     const { token, newPassword, confirmPassword } = req.body;
     if (!token || !newPassword || !confirmPassword) {
@@ -286,7 +288,7 @@ const ResetPassword = async (req, res) => {
   }
 };
 
-const Logout = async (req, res) => {
+async Logout (req, res) {
   try {
     const { id } = req.decoded;
 
@@ -306,11 +308,6 @@ const Logout = async (req, res) => {
   }
 };
 
-export {
-  Login,
-  Signup,
-  Activate,
-  ForgotPassword,
-  ResetPassword,
-  Logout,
-};
+}
+
+export default AuthController;
